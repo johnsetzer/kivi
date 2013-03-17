@@ -51,3 +51,6 @@ serveDir('/dependencies/js/');
 serveDir('/tests/');
 
 app.listen(3000);
+
+console.log('URL:');
+console.log('http://localhost:3000/example.html');
