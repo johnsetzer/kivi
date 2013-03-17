@@ -14,5 +14,8 @@
   }
 , "devDependencies": {
     "express": "3.0.x"
+  , "consolidate": "0.8.x"
+  , "node-minify": "0.7.x"
+  , "handlebars": "1.0.x"
   }
 }
