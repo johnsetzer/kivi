@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script>
+      {{{kivi}}}
+    </script>
+    <script src="dependencies/js/jquery-1.7.1.js"></script>
+    <script>
+      kivi.set('parent', 1);
+      kivi.set('parent.child', 2);
+      kivi.set('widget', 3);
+
+      $(function () {
+        kivi.config.postUrl = 'http://localhost:3000/postUrl'
+        kivi.config.$ = $;
+      
+        kivi.post();
+
+        // This second post should be ignored
+        kivi.enablePost([400]);
+      });
+    </script>
+  </head>
+  <body>
+    <h1>kivi example</h1>
+    <ol>
+      <li>Open your browser console.</li>
+      <li>It should have made a request to http://localhost:3000/postUrl</li>
+    </ol>
+  </body>
+</html>
