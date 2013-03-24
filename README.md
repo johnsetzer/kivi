@@ -14,7 +14,9 @@ This library was designed to be the common transport layer for tools that want t
 collect data and report back to the server so data from all our users could be aggregated.  
 key/value pairs were chosen because they can be injected into nearly any
 tool with very little effort. At present this library does not let you resubmit a
-given key more than once because we feel replaying of event data is of little value in our current use cases. All tools being built to use kivi are going to follow
+given key more than once because we feel replaying of event data is of little value in our current use cases. 
+kivi was originally specified with the ability to report back to the server on a fixed interval for an indefinite period.  In retrospect, this was a mistake, and this ability has been removed.
+All tools being built to use kivi are going to follow
 a period separated key convention, which will yield keys roughly in the pattern `USER_AGENT.AB_TEST.TOOL_NAME.TOOL_KEY_HIERARCHY`.
 One such key might be: `Chrome23.newFeature=on.yerf.delta.pageLoad.widgetLoad`
 
@@ -37,7 +39,7 @@ Manual post data to your server
 
     kivi.post();
 
-Automatically post data after 2000ms, and 4000ms after that,...
+Automatically post data after 2000ms, and 4000ms after that, and 8000ms after that.
 
     kivi.enablePost([2000, 4000, 8000])
 

@@ -215,76 +215,26 @@ describe('kivi', function () {
       kivi.disablePost();
     });
 
-    describe('when recurringInterval is set', function () {      
-
-      it('calls post() at each member of the startingIntervalSeries and then uses the recurringInterval', function () {
-        var spy = spyOn(kivi, 'post');
-        kivi.enablePost([100, 200], 300);
-        expect(spy.callCount).toBe(0);
-        jasmine.Clock.tick(105);
-        expect(spy.callCount).toBe(1);
-        jasmine.Clock.tick(100);
-        expect(spy.callCount).toBe(1);
-        jasmine.Clock.tick(105);
-        expect(spy.callCount).toBe(2);
-        jasmine.Clock.tick(300);
-        expect(spy.callCount).toBe(3);
-        jasmine.Clock.tick(300);
-        expect(spy.callCount).toBe(4);
-      });
-    });
-
-    describe('when recurringInterval is not set', function () {
-
-      it('calls post() at each member of the startingIntervalSeries and then stops', function () {
-        var spy = spyOn(kivi, 'post');
-        kivi.enablePost([100, 200]);
-        expect(spy.callCount).toBe(0);
-        jasmine.Clock.tick(105);
-        expect(spy.callCount).toBe(1);
-        jasmine.Clock.tick(100);
-        expect(spy.callCount).toBe(1);
-        jasmine.Clock.tick(105);
-        expect(spy.callCount).toBe(2);
-        jasmine.Clock.tick(300);
-        expect(spy.callCount).toBe(2);
-        jasmine.Clock.tick(300);
-        expect(spy.callCount).toBe(2);
-      });
-    });
-
-    describe('when only recurringInterval is set', function () {
-
-      it('calls post() on recurringInterval', function () {
-        var spy = spyOn(kivi, 'post');
-        kivi.enablePost(null, 200);
-        expect(spy.callCount).toBe(0);
-        jasmine.Clock.tick(200);
-        expect(spy.callCount).toBe(1);
-        jasmine.Clock.tick(200);
-        expect(spy.callCount).toBe(2);
-        jasmine.Clock.tick(205);
-        expect(spy.callCount).toBe(3);
-        jasmine.Clock.tick(200);
-        expect(spy.callCount).toBe(4);
-      });
+    it('calls post() at each member of the startingIntervalSeries and then stops', function () {
+      var spy = spyOn(kivi, 'post');
+      kivi.enablePost([100, 200]);
+      expect(spy.callCount).toBe(0);
+      jasmine.Clock.tick(105);
+      expect(spy.callCount).toBe(1);
+      jasmine.Clock.tick(100);
+      expect(spy.callCount).toBe(1);
+      jasmine.Clock.tick(105);
+      expect(spy.callCount).toBe(2);
+      jasmine.Clock.tick(300);
+      expect(spy.callCount).toBe(2);
+      jasmine.Clock.tick(300);
+      expect(spy.callCount).toBe(2);
     });
   });
 
   describe('disablePost()', function () {
     beforeEach(function () {
       jasmine.Clock.useMock();
-    });
-
-    it('stops interval calls to post', function () {
-      var spy = spyOn(kivi, 'post');
-      kivi.enablePost(null, 300);
-      expect(spy.callCount).toBe(0);
-      jasmine.Clock.tick(305);
-      expect(spy.callCount).toBe(1);
-      kivi.disablePost();
-      jasmine.Clock.tick(305);
-      expect(spy.callCount).toBe(1);
     });
 
     it('stops series calls to post', function () {

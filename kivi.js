@@ -7,8 +7,6 @@ var kivi = {
 , _reportedMap: {}
 
 , _startingIntervalSeries: []
-
-, _recurringInterval: null
   
 , get: function (key) {
     return this._store[key];
@@ -105,7 +103,7 @@ var kivi = {
 
 , _setTimer: function() {
     var that = this;
-    var interval = this._startingIntervalSeries.shift() || this._recurringInterval;
+    var interval = this._startingIntervalSeries.shift();
 
     if (interval) {
       this._timer = setTimeout(function(){
@@ -115,16 +113,13 @@ var kivi = {
     }
   }
 
-, enablePost: function(startingIntervalSeries, recurringInterval) {
+, enablePost: function(startingIntervalSeries) {
     this._startingIntervalSeries = startingIntervalSeries || [];
-    this._recurringInterval = recurringInterval || null;
-
     this._setTimer();
   }
 
 , disablePost: function() {
     this._startingIntervalSeries = null;
-    this._recurringInterval = null;
     clearTimeout(this._timer);
   }
 };
