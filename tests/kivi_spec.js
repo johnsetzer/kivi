@@ -101,8 +101,6 @@ describe('kivi', function () {
     });
 
     it('creates and array of samples to jsonify', function () {
-      kivi.set('unreported1', 1);
-      kivi.set('unreported2', 2);
       var postKeys = kivi.postKeys();
 
       var expected = [
@@ -113,9 +111,6 @@ describe('kivi', function () {
     });
 
     it('calls postKeys itself if the postKeys argument is omitted', function () {
-      kivi.set('unreported1', 1);
-      kivi.set('unreported2', 2);
-
       var expected = [
         { key: 'unreported1', val: 1 }
       , { key: 'unreported2', val: 2 }
@@ -124,8 +119,6 @@ describe('kivi', function () {
     });
 
     it('prefers the postKeys argument over postKeys()', function () {
-      kivi.set('unreported1', 1);
-      kivi.set('unreported2', 2);
       kivi.set('changed1', 3);
       kivi.set('changed2', 4);
 
@@ -165,6 +158,10 @@ describe('kivi', function () {
         expect(params.data).toEqual(JSON.stringify(data));
         
         expect(kivi.postKeys()).toEqual([]);
+
+        // Does not call $.ajax again if there is no data to report
+        kivi.post();
+        expect(ajaxSpy.calls.length).toBe(1);
       });
     });
 
