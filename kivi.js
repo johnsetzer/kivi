@@ -70,13 +70,6 @@ var kivi = {
     return keyPairs;
   }
 
-, _postSuccess: function(postKeys) {
-    // Mark each Sample reported
-    this._.each(postKeys, function (k) {
-      this._markReported(k)
-    }, this);
-  }
-
 , post: function() {
     var that = this;
     var $ = this.getConfig('$');
@@ -85,6 +78,12 @@ var kivi = {
       var postKeys = this.postKeys();
       
       if (postKeys.length > 0) {
+        // Mark each key reported, so it won't get rereported if post is called
+        // again before the first instance of post() is finished.
+        this._.each(postKeys, function (k) {
+          this._markReported(k)
+        }, this);
+
         var data = this.postData(postKeys);
 
         $.ajax({
@@ -92,7 +91,7 @@ var kivi = {
         , type: 'POST'
         , data: JSON.stringify(data)
         , contentType:'application/json'
-        , success: function () { that._postSuccess(postKeys); }
+        , success: function () {}
         , error: function(jqXHR, textStatus, errorThrown){
             console.log('Error posting stats: '+textStatus+' '+errorThrown);
           }

@@ -3,13 +3,12 @@ var path = require('path');
 var consolidate = require('consolidate');
 var path = require('path');
 var fs = require('fs');
-var build_name = require('./build_name');
 var app = express();
 app.engine('handlebars', consolidate.handlebars);
 app.set('views', __dirname);
 app.use(express.bodyParser());
 
-var kiviSrcMin = fs.readFileSync(build_name.buildName, 'utf-8');
+var kiviSrcMin = fs.readFileSync('kivi.min.js', 'utf-8');
 
 app.get('/example.html', function(req, res){
 

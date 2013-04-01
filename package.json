@@ -2,7 +2,7 @@
   "name": "kivi"
 , "description": "Key/Value reporting framework that uses jQuery for transport."
 , "author": "John Setzer"
-, "version": "0.0.2"
+, "version": "0.0.3"
 , "repository": {
     "type": "git"
   , "url": "git@github.com:johnsetzer/kivi.git"

@@ -144,7 +144,6 @@ describe('kivi', function () {
     beforeEach(function () {
       kivi.set('unreported1', 1);
       kivi.set('unreported2', 2);
-      postSuccessSpy = spyOn(kivi, '_postSuccess').andCallThrough();
       jquery = {ajax: function (params) {
         params.success({});
       }};
@@ -160,7 +159,6 @@ describe('kivi', function () {
         kivi.post();
         
         expect(ajaxSpy).toHaveBeenCalled();
-        expect(postSuccessSpy).toHaveBeenCalled();
         
         var params = ajaxSpy.mostRecentCall.args[0];
         expect(params.url).toBe('http://localhost');
@@ -177,7 +175,6 @@ describe('kivi', function () {
         kivi.post();
         
         expect(ajaxSpy).not.toHaveBeenCalled();
-        expect(postSuccessSpy).not.toHaveBeenCalled();
       });
     });
 
@@ -187,7 +184,6 @@ describe('kivi', function () {
         expect(function () { kivi.post(); }).toThrow('You need to set kivi.config.$');
         
         expect(ajaxSpy).not.toHaveBeenCalled();
-        expect(postSuccessSpy).not.toHaveBeenCalled();
         
         expect(kivi.postKeys()).toEqual(['unreported1', 'unreported2']);
       });
@@ -199,7 +195,6 @@ describe('kivi', function () {
         expect(function () { kivi.post(); }).toThrow('You need to set kivi.config.postUrl');
         
         expect(ajaxSpy).not.toHaveBeenCalled();
-        expect(postSuccessSpy).not.toHaveBeenCalled();
         
         expect(kivi.postKeys()).toEqual(['unreported1', 'unreported2']);
       });
