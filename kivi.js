@@ -57,9 +57,9 @@ var kivi = {
     return keys;
   }
 
-, postData: function(keysToPost) {
+, postList: function(keysToPost) {
     var keyPairs = [];
-    keysToPost = keysToPost || this.postKeys()
+    keysToPost = keysToPost || this.postKeys();
     this._.each(keysToPost, function (k) {
       var pair = { 
         key: k
@@ -68,6 +68,16 @@ var kivi = {
       keyPairs.push(pair);
     }, this);
     return keyPairs;
+  }
+
+/*
+ * Default behavior is to return an array of key/value pairs.
+ * postList() is a separate method in case a user wants reuse postList()
+ * in the process of overriding postData().
+ */
+, postData: function(keysToPost) {
+    var payload = this.postList(keysToPost);
+    return payload;
   }
 
 , post: function() {

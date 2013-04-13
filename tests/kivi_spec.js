@@ -94,20 +94,20 @@ describe('kivi', function () {
     });
   });
 
-  describe('postData', function () {
+  describe('postList', function () {
     beforeEach(function () {
       kivi.set('unreported1', 1);
       kivi.set('unreported2', 2);
     });
 
-    it('creates and array of samples to jsonify', function () {
+    it('creates and array of key/val pairs to jsonify', function () {
       var postKeys = kivi.postKeys();
 
       var expected = [
         { key: 'unreported1', val: 1 }
       , { key: 'unreported2', val: 2 }
       ];
-      expect(kivi.postData(postKeys)).toEqual(expected);
+      expect(kivi.postList(postKeys)).toEqual(expected);
     });
 
     it('calls postKeys itself if the postKeys argument is omitted', function () {
@@ -115,7 +115,7 @@ describe('kivi', function () {
         { key: 'unreported1', val: 1 }
       , { key: 'unreported2', val: 2 }
       ];
-      expect(kivi.postData()).toEqual(expected);
+      expect(kivi.postList()).toEqual(expected);
     });
 
     it('prefers the postKeys argument over postKeys()', function () {
@@ -126,7 +126,24 @@ describe('kivi', function () {
         { key: 'changed1', val: 3 }
       , { key: 'changed2', val: 4 }
       ];
-      expect(kivi.postData(['changed1', 'changed2'])).toEqual(expected);
+      expect(kivi.postList(['changed1', 'changed2'])).toEqual(expected);
+    });
+  });
+
+  describe('postData', function () {
+    beforeEach(function () {
+      kivi.set('unreported1', 1);
+      kivi.set('unreported2', 2);
+    });
+
+    it('returns the post payload, an array of key/value pairs', function () {
+      var postKeys = kivi.postKeys();
+
+      var expected = [
+        { key: 'unreported1', val: 1 }
+      , { key: 'unreported2', val: 2 }
+      ];
+      expect(kivi.postData(postKeys)).toEqual(expected);
     });
   });
 
