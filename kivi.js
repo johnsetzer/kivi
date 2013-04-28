@@ -14,9 +14,9 @@ var kivi = {
 
 , set: function (key, value) {
     if (this.get(key)) {
-      this.onError(new Error('You already set key[' + key + '] to [' + this.get(key) + '].'));
+      this.onError(new Error('kivi: You already set key[' + key + '] to [' + this.get(key) + '].'));
     } else if (typeof value !== 'number') { 
-      this.onError(new Error('[' + key + '][' + value + '] is not a number.'));
+      this.onError(new Error('kivi: [' + key + '][' + value + '] is not a number.'));
     } else {
       this._store[key] = value;
     }
@@ -36,14 +36,17 @@ var kivi = {
   }
 
 , onError: function(error) {
-    console.log(error.message);
+    // IE-7 throws error if you use "console" instead of "window.console"
+    if (window.console && window.console.log) {
+      window.console.log(error.message);
+    }
   }
 
 , getConfig: function (key) {
     if (this.config[key]) {
       return this.config[key];
     } else {
-      throw new Error('You need to set kivi.config.' + key);
+      throw new Error('kivi: You need to set kivi.config.' + key);
     }
   }
 
@@ -84,7 +87,8 @@ var kivi = {
     var that = this;
     var $ = this.getConfig('$');
     var url = this.getConfig('postUrl');
-    if ($ && url) {
+    var toJsonFunc = this.getToJSON();
+    if ($ && url && toJsonFunc) {
       var postKeys = this.postKeys();
       
       if (postKeys.length > 0) {
@@ -99,15 +103,32 @@ var kivi = {
         $.ajax({
           url: url
         , type: 'POST'
-        , data: JSON.stringify(data)
+        , data: toJsonFunc(data)
         , contentType:'application/json'
         , success: function () {}
         , error: function(jqXHR, textStatus, errorThrown){
-            console.log('Error posting stats: '+textStatus+' '+errorThrown);
+            that.onError(new Error('kivi: Error posting stats: '+textStatus+' '+errorThrown));
           }
         });
       }
     }
+  }
+
+, getToJSON: function(object) {
+    var toJsonFunc;
+
+    if (window.JSON && window.JSON.stringify) {
+      toJsonFunc = window.JSON.stringify;
+    }
+
+    // Fall back on $.toJSON for old browsers
+    if (!toJsonFunc) {
+      var $ = this.getConfig('$');
+      if ($ && $.toJSON) {
+        toJsonFunc = $.toJSON;
+      }
+    }
+    return toJsonFunc;
   }
 
 , _setTimer: function() {
@@ -150,7 +171,7 @@ var kivi = {
       }
     } else {
       for (var key in obj) {
-        if (hasOwnProperty.call(obj, key)) {
+        if (obj.hasOwnProperty.call(obj, key)) {
           if (iterator.call(context, obj[key], key, obj) === breaker) return;
         }
       }

@@ -1,5 +1,12 @@
 describe('kivi', function () {
 
+  var expectOnError = function (expectedErrorMsg) {
+    var sampleOnError = spyOn(kivi, 'onError').andCallFake(function (error) {
+      expect(error.message).toBe(expectedErrorMsg);
+    });
+    return sampleOnError;
+  }
+
   jasmine.Spy.prototype.restore = function() {
     this.baseObj[this.methodName] = this.originalValue;
   };
@@ -18,16 +25,16 @@ describe('kivi', function () {
     });
 
     it('call onError if you try to set a value twice', function () {
-      spyOn(kivi, 'onError');
+      var errorSpy = expectOnError('kivi: You already set key[key] to [1].');
       kivi.set('key', 1);
       kivi.set('key', 1);
-      expect(kivi.onError).toHaveBeenCalledWith(new Error('You already set key[key] to [1].'));
+      expect(errorSpy).toHaveBeenCalled();
     });
 
     it('call onError if you try to set a value that is not a number', function () {
-      spyOn(kivi, 'onError');
+      var errorSpy = expectOnError('kivi: [key][string] is not a number.');
       kivi.set('key', 'string');
-      expect(kivi.onError).toHaveBeenCalledWith(new Error('[key][string] is not a number.'));
+      expect(errorSpy).toHaveBeenCalled();
     });
   });
 
@@ -182,6 +189,27 @@ describe('kivi', function () {
       });
     });
 
+    describe('when the request fails', function () {
+      beforeEach(function () {
+        jquery = {ajax: function (params) {
+          params.error({}, 'textStatus', 'errorThrown');
+        }};
+
+        ajaxSpy = spyOn(jquery, 'ajax').andCallThrough();
+        kivi.config.$ = jquery;
+      });
+
+      it('calls onError', function () {
+        var errorSpy = expectOnError('kivi: Error posting stats: textStatus errorThrown');
+        var data = kivi.postData(kivi.postKeys());
+        
+        kivi.post();
+        
+        expect(ajaxSpy).toHaveBeenCalled();
+        expect(errorSpy).toHaveBeenCalled();
+      });
+    });
+
     describe('when JQuery and post URL are set and there are not key/value pairs to report', function () {
       it('does not report the key/value pairs', function () {
         kivi._markReported('unreported1');
@@ -195,7 +223,7 @@ describe('kivi', function () {
     describe('when JQuery is not set and post URL is set and there are key/value pairs to report', function () {
       it('does not report the key/value pairs', function () {
         kivi.config.$ = undefined;
-        expect(function () { kivi.post(); }).toThrow('You need to set kivi.config.$');
+        expect(function () { kivi.post(); }).toThrow('kivi: You need to set kivi.config.$');
         
         expect(ajaxSpy).not.toHaveBeenCalled();
         
@@ -206,8 +234,19 @@ describe('kivi', function () {
     describe('when JQuery is set and post URL is not set and there are key/value pairs to report', function () {
       it('does not report the key/value pairs', function () {
         kivi.config.postUrl = undefined;
-        expect(function () { kivi.post(); }).toThrow('You need to set kivi.config.postUrl');
+        expect(function () { kivi.post(); }).toThrow('kivi: You need to set kivi.config.postUrl');
         
+        expect(ajaxSpy).not.toHaveBeenCalled();
+        
+        expect(kivi.postKeys()).toEqual(['unreported1', 'unreported2']);
+      });
+    });
+
+    describe('when JQuery is set and post URL is set and there are key/value pairs to report and there is no toJSON', function () {
+      it('does not report the key/value pairs', function () {
+        spyOn(kivi, 'getToJSON').andReturn(undefined);
+        // Just silently fails.
+        // Don't want to force developers to support JSON on old browsers
         expect(ajaxSpy).not.toHaveBeenCalled();
         
         expect(kivi.postKeys()).toEqual(['unreported1', 'unreported2']);

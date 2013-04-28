@@ -6,19 +6,23 @@
       {{{kivi}}}
     </script>
     <script src="dependencies/js/jquery-1.7.1.js"></script>
+    <script src="dependencies/js/jquery.json-2.4.js"></script>
     <script>
       kivi.set('parent', 1);
       kivi.set('parent.child', 2);
       kivi.set('widget', 3);
 
       $(function () {
-        kivi.config.postUrl = 'http://localhost:3000/postUrl'
+        kivi.config.postUrl = 'http://localhost:{{port}}/postUrl'
         kivi.config.$ = $;
       
         kivi.post();
 
         // This second post should be ignored
         kivi.enablePost([400]);
+
+        // Testing kivi onError
+        kivi.onError(new Error('This is a test error.  Please ignore it.'));
       });
     </script>
   </head>
@@ -26,7 +30,7 @@
     <h1>kivi example</h1>
     <ol>
       <li>Open your browser console.</li>
-      <li>It should have made a request to http://localhost:3000/postUrl</li>
+      <li>It should have made a request to http://localhost:{{port}}/postUrl</li>
     </ol>
   </body>
 </html>

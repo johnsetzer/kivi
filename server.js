@@ -8,12 +8,18 @@ app.engine('handlebars', consolidate.handlebars);
 app.set('views', __dirname);
 app.use(express.bodyParser());
 
+var PORT = 3001;
+
+var kiviSrcFull = fs.readFileSync('kivi.js', 'utf-8');
 var kiviSrcMin = fs.readFileSync('kivi.min.js', 'utf-8');
 
 app.get('/example.html', function(req, res){
 
+  var kiviSrc = req.query.src === 'full' ? kiviSrcFull : kiviSrcMin;
+
   var templateData = {
-    kivi: kiviSrcMin
+    kivi: kiviSrc
+  , port: PORT
   }
 
   app.render('example.html.handlebars', templateData, function(err, html){
@@ -49,7 +55,7 @@ serveDir('/dependencies/jasmine/');
 serveDir('/dependencies/js/');
 serveDir('/tests/');
 
-app.listen(3000);
+app.listen(PORT);
 
 console.log('URL:');
-console.log('http://localhost:3000/example.html');
+console.log('http://localhost:' + PORT + '/example.html');
