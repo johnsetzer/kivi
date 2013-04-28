@@ -6,7 +6,7 @@ Reusable lib for reporting key/value pairs to the server with jQuery.
 # Design Rational
 We want to measure things like:
 
-- Speed of events, such as page load time, asset download time, widget rendering time, etc...
+- Speed of events, such as page load time, asset download time, widget rendering time, etc... See [Yerf](https://github.com/johnsetzer/yerf).
 - Browser cache hit ratios
 - User actions
 
@@ -19,8 +19,8 @@ given key more than once because we feel replaying of event data is of little va
 kivi was originally specified with the ability to report back to the server on a fixed interval for an indefinite period.  In retrospect, this was a mistake, and this ability has been removed.
 
 All tools being built to use kivi are going to follow
-a period separated key convention, which will yield keys roughly in the pattern `USER_AGENT.AB_TEST.TOOL_NAME.TOOL_KEY_HIERARCHY`.
-One such key might be: `Chrome23.newFeature=on.yerf.delta.pageLoad.widgetLoad`
+a period separated key convention, which will yield keys roughly in the pattern `TOOL_NAME.TOOL_KEY_HIERARCHY`.
+One such key might be: `yerf.delta.pageLoad.widgetLoad`
 
 #Usage
 
@@ -43,11 +43,18 @@ Manual post data to your server
 
 Automatically post data after 2000ms, 4000ms after that, and 8000ms after that.
 
-    kivi.enablePost([2000, 4000, 8000])
+    kivi.enablePost([2000, 4000, 8000]);
+
+You probably only want to collect data from a small fraction of users.
+
+    var REPORT_THRESHOLD = 0.01;
+    if (Math.random() < REPORT_THRESHOLD) {
+      kivi.enablePost([2000, 4000, 8000]);
+    }
 
 Disable automatic posting
 
-    kivi.disablePost()
+    kivi.disablePost();
 
 #Setup
 
@@ -64,12 +71,12 @@ Disable automatic posting
 #Run example
 
     jake server
-    Open http://localhost:3000/example.html
+    Open http://localhost:3001/example.html
 
 #Run tests
 
     jake server
-    http://localhost:3000/tests/test_suite.html
+    http://localhost:3001/tests/test_suite.html
 
 #Run tests with testem
 
@@ -77,9 +84,23 @@ Disable automatic posting
 
 #Advanced Config
 - If your server does't like the format kivi posts data to the server in, override the `kivi.postData()` method.
-- `kivi.onError()` is fired on runtime errors, such as trying to set the same key more than once.  It defaults to.
+- `kivi.onError()` is fired on runtime errors, such as trying to set the same key more than once.  It defaults to logging errors, but you can override it.
 
 
-    function(error) {
-        console.log(error.message);
+    kivi.onError = function(error) {
+      if (window.console && window.console.log) {
+        window.console.log(error.message);
+      }
     }
+
+#Browser Compatibility
+kivi is tested in IE 7-10, latest Chrome, latest Firefox, and latests Safari
+
+Older browsers, IE7, don't support `JSON.stringify()`. Kivi prefers to use `JSON.stringify()`, but it will fall back on [jquery.json](https://code.google.com/p/jquery-json/) if `JSON.stringify()` is missing and jquery.json is present on the page. You can set your own JSON library by overriding `kivi.getToJSON()`.
+
+#License
+Kivi is licensed under the Apache Version 2.0 License.
+
+http://www.apache.org/licenses/LICENSE-2.0.html
+
+Kivi inlines a snippet of the [Underscore](http://underscorejs.org/) library which is licensed under the MIT license.

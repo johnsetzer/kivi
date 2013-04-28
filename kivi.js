@@ -1,3 +1,12 @@
+/*!
+ * Kivi v0.1.0
+ * https://github.com/johnsetzer/kivi
+ *
+ * Copyright 2013 John Setzer
+ *
+ * License: Apache Version 2.0
+ * http://www.apache.org/licenses/LICENSE-2.0.html
+*/
 var kivi = {
 
   config: {}
@@ -154,7 +163,8 @@ var kivi = {
   }
 };
 
-// Append a minimal Underscore implementation to kivi
+// Append a minimal Underscore implementation to kivi.
+// http://underscorejs.org/ uses MIT license.
 (function () {
   var ArrayProto = Array.prototype;
   var nativeForEach = ArrayProto.forEach;
