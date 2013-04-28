@@ -1,7 +1,7 @@
 kivi
 ====
 
-Reusable lib for reporting key/value pairs to the server with jQuery.
+Reusable lib for reporting key/value pairs to the server with [jQuery](http://jquery.com/).
 
 # Design Rational
 We want to measure things like:
@@ -34,7 +34,7 @@ Get a key/value pair you have stored
 
 Does some basic setup so kivi knows where to send your data
 
-    kivi.config.postUrl = 'http://localhost:3000/postUrl'
+    kivi.config.postUrl = 'http://localhost:3001/postUrl'
     kivi.config.$ = $;
     
 Manual post data to your server
