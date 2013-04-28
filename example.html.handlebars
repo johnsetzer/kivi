@@ -13,7 +13,7 @@
       kivi.set('widget', 3);
 
       $(function () {
-        kivi.config.postUrl = 'http://localhost:{{port}}/postUrl'
+        kivi.config.postUrl = 'http://' + window.location.host + '/postUrl'
         kivi.config.$ = $;
       
         kivi.post();

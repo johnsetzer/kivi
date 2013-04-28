@@ -36,7 +36,7 @@ var kivi = {
   }
 
 , onError: function(error) {
-    // IE-7 throws error if you use "console" instead of "window.console"
+    // IE7 throws error if you use "console" instead of "window.console"
     if (window.console && window.console.log) {
       window.console.log(error.message);
     }
