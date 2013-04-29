@@ -1,5 +1,5 @@
 /*!
- * Kivi v0.1.0
+ * Kivi v0.2.0
  * https://github.com/johnsetzer/kivi
  *
  * Copyright 2013 John Setzer
@@ -45,9 +45,14 @@ var kivi = {
   }
 
 , onError: function(error) {
+    this.log(error.message);
+  }
+
+, log: function(msg) {
     // IE7 throws error if you use "console" instead of "window.console"
     if (window.console && window.console.log) {
-      window.console.log(error.message);
+      var args = Array.prototype.slice.call(arguments);
+      console.log(args.join(' '));
     }
   }
 
