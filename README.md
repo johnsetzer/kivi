@@ -86,12 +86,11 @@ Disable automatic posting
 - If your server does't like the format kivi posts data to the server in, override the `kivi.postData()` method.
 - `kivi.onError()` is fired on runtime errors, such as trying to set the same key more than once.  It defaults to logging errors, but you can override it.
 
-
-    kivi.onError = function(error) {
-      if (window.console && window.console.log) {
-        window.console.log(error.message);
-      }
-    }
+        kivi.onError = function(error) {
+          if (window.console && window.console.log) {
+            window.console.log(error.message);
+          }
+        }
 
 #Browser Compatibility
 kivi is tested in IE 7-10, latest Chrome, latest Firefox, and latests Safari
