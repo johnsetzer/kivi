@@ -32,12 +32,12 @@ Get a key/value pair you have stored
 
     kivi.get('key');
 
-Does some basic setup so kivi knows where to send your data
+Do some basic setup so kivi knows where to send your data
 
     kivi.config.postUrl = 'http://localhost:3001/postUrl'
     kivi.config.$ = $;
     
-Manual post data to your server
+Manually post data to your server
 
     kivi.post();
 
